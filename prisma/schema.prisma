@@ -21,3 +21,8 @@ model Category {
     color   String
     expense Boolean
 }
+model User {
+    id       Int      @id @default(autoincrement())
+    username String   @unique
+    password String
+}
