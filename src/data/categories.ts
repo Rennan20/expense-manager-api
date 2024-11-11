@@ -17,4 +17,28 @@ export const categories = [
     color: "green",
     expense: false,
   },
+  {
+    tag: "health",
+    title: "Saúde",
+    color: "orange",
+    expense: true,
+  },
+  {
+    tag: "education",
+    title: "Educação",
+    color: "yellow",
+    expense: true,
+  },
+  {
+    tag: "leisure",
+    title: "Lazer",
+    color: "purple",
+    expense: true,
+  },
+  {
+    tag: "investments",
+    title: "Investimentos",
+    color: "lightblue",
+    expense: false,
+  },
 ];

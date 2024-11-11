@@ -3,7 +3,7 @@ import { PrismaClient, Item as PrismaItem } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export class Item {
-  async createItem(data: PrismaItem) {
+  async createItem(data: Omit<PrismaItem, "id">) {
     return await prisma.item.create({ data });
   }
 
@@ -15,7 +15,7 @@ export class Item {
     return await prisma.item.findUnique({ where: { id } });
   }
 
-  async updateItem(id: number, data: Partial<PrismaItem>) {
+  async updateItem(id: number, data: Partial<Omit<PrismaItem, "id">>) {
     return await prisma.item.update({
       where: { id },
       data,

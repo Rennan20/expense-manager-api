@@ -5,12 +5,11 @@ import itemRoutes from "./routes/itemRoutes";
 import categoryRoutes from "./routes/categoryRoutes";
 import authRoutes from "./routes/authRouthe";
 
-
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
-app.use(cors()); // Adicionando o middleware CORS
+app.use(cors({ origin: "*" }));
 app.use(bodyParser.json());
 
 // Rotas

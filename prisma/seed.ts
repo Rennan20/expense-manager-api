@@ -1,19 +1,28 @@
 import { PrismaClient } from "@prisma/client";
-import { categories } from "../src/data/categories"; // Ajuste o caminho se necessário
-import { items } from "../src/data/items"; // Ajuste o caminho se necessário
+import { categories } from "../src/data/categories";
+import { items } from "../src/data/items";
 
 const prisma = new PrismaClient();
 
 async function main() {
   for (const category of categories) {
-    await prisma.category.create({ data: category });
+    await prisma.category.upsert({
+      where: { tag: category.tag },
+      update: {},
+      create: category,
+    });
   }
 
+  // Usando upsert para itens
   for (const item of items) {
-    await prisma.item.create({ data: item });
+    await prisma.item.upsert({
+      where: { id: item.id },
+      update: {},
+      create: item,
+    });
   }
 
-  console.log("Categorias e itens foram semeados.");
+  console.log("Categorias e itens foram semeados ou já existem.");
 }
 
 main()

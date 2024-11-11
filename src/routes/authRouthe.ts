@@ -1,16 +1,17 @@
 import { Router } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { User } from "../models/User"; // Importe seu modelo de usuário
-
+import { User } from "../models/User";
 const router = Router();
-const userModel = new User(); // Crie uma instância da classe User
-
-// Registro de novo usuário
+const userModel = new User();
 router.post("/register", async (req, res) => {
   const { username, password } = req.body;
 
-  // Criptografa a senha
+  const existingUser = await userModel.findUnique({ username });
+  if (existingUser) {
+    return res.status(400).json({ message: "Username já em uso" });
+  }
+
   const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
@@ -18,26 +19,24 @@ router.post("/register", async (req, res) => {
       username,
       password: hashedPassword,
     });
-    res.status(201).json(newUser); // Retorna 201 Created
+    res.status(201).json(newUser);
   } catch (error) {
     res.status(500).json({ message: "Erro ao criar o usuário", error });
   }
 });
 
-// Login de usuário
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    const user = await userModel.findUnique({ username }); // Use a instância aqui
+    const user = await userModel.findUnique({ username });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ message: "Usuário ou senha inválidos" });
     }
 
-    const secret = process.env.JWT_SECRET; // Acessando a variável de ambiente
+    const secret = process.env.JWT_SECRET;
 
-    // Verifica se a variável JWT_SECRET está definida
     if (!secret) {
       return res
         .status(500)
